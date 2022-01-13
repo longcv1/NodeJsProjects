@@ -1,6 +1,8 @@
 const Task = require('../models/Task');
 
-
+///////////////////////////////////////////////////////////////////////////////
+//@@ Gets all the tasks name
+///////////////////////////////////////////////////////////////////////////////
 const getAllTasks = async (req, res) => {
     try {
         const tasks = await Task.find({});
@@ -13,6 +15,9 @@ const getAllTasks = async (req, res) => {
     }
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//@@ Gets specify task name by id
+///////////////////////////////////////////////////////////////////////////////
 const getTask = async(req, res) => {
     const {id:taskId} = req.params;
     try {
@@ -26,6 +31,9 @@ const getTask = async(req, res) => {
     }
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//@@ Create a new task
+///////////////////////////////////////////////////////////////////////////////
 const createTask = async (req, res) => {
     const newTask = await Task.create(req.body);
     try {
@@ -35,14 +43,42 @@ const createTask = async (req, res) => {
     }
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//@@ Update specify task by id
+///////////////////////////////////////////////////////////////////////////////
 const updateTask = (req, res) => {
-    res.send('Update task');
+    const {id:taskId} = req.params;
+    try {
+        const task = await Task.findOneAndUpdate({_id:taskId},req.body,{
+            new:true,
+            runValidators:true
+        });
+        if(!task){
+            return res.status(404).json({msg:"Update failed!"});
+        }
+        return res.status(200).json({id:taskId, data:req.body});
+    } catch (error) {
+        res.status(500).json({msg:error});
+    }
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//@@ Delete a task
+///////////////////////////////////////////////////////////////////////////////
 const deleteTask = (req, res) => {
-    res.send('Delete a task');
+    const {id:taskId} = req.params;
+    try {
+        const task = await Task.findOneAndDelete({_id:taskId});
+        if(!task){
+            return res.status(404).json({msg:"Delete failed!"});
+        }
+        return res.status(200).json({msg: "Task deleted"});
+    } catch (error) {
+        res.status(500).json({msg:error});
+    }
 };
 
+//Export module
 module.exports = {
     getAllTasks,
     getTask,

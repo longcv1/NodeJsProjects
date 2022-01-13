@@ -3,12 +3,13 @@ const mongoose = require('mongoose');
 const TaskSchema = new mongoose.Schema({
     name:{
         type:String,
-        required:true
+        required:true,
     },
     completed:{
         type:Boolean,
-        default:false
+        default:false,
     }
 })
 
+//Export module
 module.exports = mongoose.model('Task', TaskSchema);
