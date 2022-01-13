@@ -10,6 +10,7 @@ require('dotenv').config();
 // Init express app
 const app = express();
 app.use(express.json());
+app.use(express.static('./public'));
 
 // Using middleware
 app.use('/api/v1/tasks', task);

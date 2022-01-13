@@ -18,14 +18,14 @@ const getAllTasks = async (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////
 //@@ Gets specify task name by id
 ///////////////////////////////////////////////////////////////////////////////
-const getTask = async(req, res) => {
-    const {id:taskId} = req.params;
+const getTask = async (req, res) => {
     try {
+        const {id:taskId} = req.params;
         const task = await Task.findOne({_id:taskId});
         if(!task){
             return res.status(404).json({msg:"Task not found!"});
         }
-        return res.status(200).json({msg: "Task found"},task);
+        return res.status(200).json({msg: "Task found", task});
     } catch (error) {
         res.status(500).json({msg:error});
     }
@@ -35,20 +35,20 @@ const getTask = async(req, res) => {
 //@@ Create a new task
 ///////////////////////////////////////////////////////////////////////////////
 const createTask = async (req, res) => {
-    const newTask = await Task.create(req.body);
     try {
-        res.status(201).json({message: "Task added", newTask});
+        const newTask = await Task.create(req.body);
+        return res.status(201).json({message: "Task added", newTask});
     } catch (error) {
-        res.status(500).json({msg:error});    
+        return res.status(500).json({msg:error});    
     }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 //@@ Update specify task by id
 ///////////////////////////////////////////////////////////////////////////////
-const updateTask = (req, res) => {
-    const {id:taskId} = req.params;
+const updateTask = async (req, res) => {
     try {
+        const {id:taskId} = req.params;
         const task = await Task.findOneAndUpdate({_id:taskId},req.body,{
             new:true,
             runValidators:true
@@ -65,9 +65,9 @@ const updateTask = (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////
 //@@ Delete a task
 ///////////////////////////////////////////////////////////////////////////////
-const deleteTask = (req, res) => {
-    const {id:taskId} = req.params;
+const deleteTask = async (req, res) => {
     try {
+        const {id:taskId} = req.params;
         const task = await Task.findOneAndDelete({_id:taskId});
         if(!task){
             return res.status(404).json({msg:"Delete failed!"});
