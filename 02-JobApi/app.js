@@ -1,27 +1,40 @@
+/**
+ * Dependencies
+ */
 require("dotenv").config();
 // require('express-async-errors')
-
-const express = require("express");
-const app = express();
-
 const ErrorHandlerMiddleware = require("./middlewares/error-handler");
 const NotFoundMiddleware = require("./middlewares/not-found");
+const AuthRouter = require('./routes/auth');
+const JobRouter = require('./routes/jobs');
+const connectDB = require('./db/connect')
 
+/**
+ * Init express
+ */
+const express = require("express");
+const app = express();
 app.use(express.json());
 
-//routes
-app.get("/", (req, res) => {
-  res.send("job-api");
-});
+/**
+ * Routes
+ */
+app.use('/api/v1/auth', AuthRouter);
+app.use('/api/v1/jobs', JobRouter);
 
-//app.use(NotFoundMiddleware);
-//app.use(ErrorHandlerMiddleware);
+/**
+ * Middlewares
+ */
+app.use(NotFoundMiddleware);
+app.use(ErrorHandlerMiddleware);
 
 const port = process.env.PORT || 4000;
 
 const start = async () => {
   try {
-    app.listen(port, console.log("Server is running at ${port}..."));
+    // Connect database
+    await connectDB(process.env.MONGO_URI);
+    app.listen(port, console.log(`Server is running at ${port}...`));
   } catch (error) {
      console.log(error);
   }

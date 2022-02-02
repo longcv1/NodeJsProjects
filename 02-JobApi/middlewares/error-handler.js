@@ -8,4 +8,4 @@ const ErrorHandlerMiddleware = (err, req, res, next) => {
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ err });
 };
 
-module.exports = { ErrorHandlerMiddleware };
+module.exports = ErrorHandlerMiddleware;
