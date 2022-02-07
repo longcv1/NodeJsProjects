@@ -16,11 +16,13 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
+const authentication = require('./middlewares/authentication');
+
 /**
  * Routes
  */
 app.use('/api/v1/auth', AuthRouter);
-app.use('/api/v1/jobs', JobRouter);
+app.use('/api/v1/jobs',authentication, JobRouter);
 
 /**
  * Middlewares
