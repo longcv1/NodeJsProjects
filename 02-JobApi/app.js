@@ -22,7 +22,7 @@ const authentication = require('./middlewares/authentication');
  * Routes
  */
 app.use('/api/v1/auth', AuthRouter);
-app.use('/api/v1/jobs',authentication, JobRouter);
+app.use('/api/v1/jobs', authentication, JobRouter);
 
 /**
  * Middlewares
