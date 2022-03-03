@@ -5,7 +5,8 @@ const User = require('../models/User');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const jwt = require('jsonwebtoken');
-const {createJwt, isTokenValid, attachCookiesToRes} = require('../utils');
+const {attachCookiesToRes, createTokenUser} = require('../utils');
+const { create } = require('../models/User');
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -13,7 +14,8 @@ const {createJwt, isTokenValid, attachCookiesToRes} = require('../utils');
 //@@ input: name, userId, role
 ///////////////////////////////////////////////////////////////////////////////
 function settingTokenAndCookies(user, res) {
-    const tokenUser = { name: user.name, userId: user._id, role: user.role };
+    //const tokenUser = { name: user.name, userId: user._id, role: user.role };
+    const tokenUser = createTokenUser(user);
     const token = attachCookiesToRes({ res, user: tokenUser });
     console.log(token);
     res.status(StatusCodes.CREATED).json({ user: tokenUser, token:token });
@@ -29,14 +31,8 @@ const register = async (req, res) => {
     if(isEmailExisted){
         throw new CustomError.BadRequestError('Email already existed!');
     }
-
     const user = await User.create(req.body);
-
-    //settingTokenAndCookies(user, res);
-    // Create token and attach the cookies
-     const tokenUser = { name: user.name, userId: user._id, role: user.role };
-     attachCookiesToRes({res, user:tokenUser});
-     res.status(StatusCodes.CREATED).json({ user:tokenUser });
+    settingTokenAndCookies(user, res);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,17 +46,15 @@ const login = async (req, res) => {
     }
 
     const user = await User.findOne({email});
+    if(!user){
+        throw new CustomError.UnauthenticatedError('Wrong email!');
+    }
     const isMatchedPassword = await user.comparePassword(password);
     
-    if(!user && !isMatchedPassword){
-        throw new CustomError.UnauthenticatedError('Invalid Credential!');
+    if(!isMatchedPassword){
+        throw new CustomError.UnauthenticatedError('Wrong password!');
     }
-
-    //settingTokenAndCookies(user, res);
-    const tokenUser = { name: user.name, userId: user._id, role: user.role };
-    const token = attachCookiesToRes({ res, user: tokenUser });
-    console.log(token);
-    res.status(StatusCodes.CREATED).json({ user: tokenUser, token:token });
+    settingTokenAndCookies(user, res);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
