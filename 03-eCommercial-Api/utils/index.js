@@ -3,10 +3,12 @@ const {
 } = require('./jwt');
 
 const createTokenUser = require('./createtoken');
+const checkPermissions = require('./checkPermission');
 
 module.exports = {
     createJwt,
     isTokenValid,
     attachCookiesToRes,
-    createTokenUser
+    createTokenUser,
+    checkPermissions
 };

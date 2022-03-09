@@ -4,7 +4,7 @@
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const CustomeError = require("../errors");
-const {createTokenUser, attachCookiesToRes} = require('../utils');
+const {createTokenUser, attachCookiesToRes, checkPermissions} = require('../utils');
 
 ///////////////////////////////////////////////////////////////////////////////
 //@@ Get All Users
@@ -23,6 +23,7 @@ const getSingleUser = async (req, res) => {
   if (!user) {
     throw new CustomeError.NotFoundError("User not found!");
   }
+  checkPermissions(req.user, user._id);
   res.status(StatusCodes.OK).json({ user: user });
 };
 
@@ -61,7 +62,6 @@ const updateUserPassword = async (req, res) => {
   }
 
   const user = await User.findOne({ _id: req.user.userId });
-  console.log(user);
   const isPasswordCorrect = await user.comparePassword(oldPassword);
   if (!isPasswordCorrect) {
     throw new CustomeError.BadRequestError("Wrong old password!");
