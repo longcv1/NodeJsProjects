@@ -8,9 +8,10 @@ const connectDB = require('./db/connect');
 const NotFoundHandler = require('./middleware/not-found');
 const ErrorHandler = require('./middleware/error-handler');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/AuthRoute');
 const userRouter = require('./routes/UserRoute');
-const cookieParser = require('cookie-parser');
+const productRouter = require('./routes/ProductRoute');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.get('/v1/api', (req, res) => {
 })
 app.use('/v1/api/auth', authRouter);
 app.use('/v1/api/users', userRouter);
+app.use('/v1/api/products', productRouter);
 
 /**
  * Use Middleware
