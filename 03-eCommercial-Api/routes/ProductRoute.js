@@ -22,9 +22,9 @@ router
   .post([authenticateUser, authorizePermissions("admin")], uploadImage);
 
 router
-  .route(":/id")
+  .route('/:id')
   .get(getSingleProduct)
-  .patch([authenticateUser, authorizePermissions("admin"), updateProduct])
-  .delete([authenticateUser, authorizePermissions("admin"), deleteProduct]);
+  .patch([authenticateUser, authorizePermissions("admin")], updateProduct)
+  .delete([authenticateUser, authorizePermissions("admin")], deleteProduct);
 
 module.exports = router;

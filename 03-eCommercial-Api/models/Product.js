@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 
 const ProductSchema = mongoose.Schema(
   {
@@ -29,12 +29,13 @@ const ProductSchema = mongoose.Schema(
       type: String,
       required: [true, "Please enter company"],
       enum: {
-        values: ["ikea", "marcos", "toto", "lock&lock"],
+        values: ["ikea", "marcos", "toto", "lock&lock","liddy"],
         message: "{VALUE} is not supported",
       },
     },
     color: {
-      type: String,
+      type: [String],
+      default:['#222'],
       required: false,
     },
     featured: {
@@ -52,7 +53,7 @@ const ProductSchema = mongoose.Schema(
     },
     user: {
       type: mongoose.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
   },
