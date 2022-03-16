@@ -14,6 +14,7 @@ const authRouter = require("./routes/AuthRoute");
 const userRouter = require("./routes/UserRoute");
 const productRouter = require("./routes/ProductRoute");
 const reviewRouter = require("./routes/ReviewRoute");
+const orderRouter = require("./routes/OrderRoute");
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/v1/api/auth", authRouter);
 app.use("/v1/api/users", userRouter);
 app.use("/v1/api/products", productRouter);
 app.use("/v1/api/reviews", reviewRouter);
+app.use('/v1/api/orders', orderRouter);
 
 /**
  * Use Middleware
