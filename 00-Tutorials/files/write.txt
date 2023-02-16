@@ -1,0 +1,8 @@
+Parameters: This method accept four parameters as mentioned above and described below:
+file: It is a string, Buffer, URL or file description integer that denotes the path of the file where it has to be written. Using a file descriptor will make it behave similar to fs.write() method.
+data: It is a string, Buffer, TypedArray or DataView that will be written to the file.
+options: It is an string or object that can be used to specify optional parameters that will affect the output. It has three optional parameter:
+encoding: It is a string value that specifies the encoding of the file. The default value is ‘utf8’.
+mode: It is an integer value that specifies the file mode. The default value is 0o666.
+flag: It is a string value that specifies the flag used while writing to the file. The default value is ‘w’.
+callback: It is the function that would be called when the method is executed.
