@@ -1,72 +1,39 @@
-const puppeteer = require('puppeteer');
-const cheerio = require('cheerio');
+import { load } from "cheerio";
+import request from 'request-promise';
+import fs from 'fs';
 
-const scrapingResults = [
-    {
-        source: 'vnexpress.net',
-        title: 'title',
-        content: 'content',
-        url: 'https://vnexpress.net/xxxx.html'
+const MAPPING_URL = {
+    'https://vnexpress.net/': 'vnexpress',
+    'https://dantri.com.vn/': 'dantri',
+};
+
+const crawlDataFromVnexpress = async (url) => {
+    let articlesList = [];
+    try {
+        const source = MAPPING_URL[url];
+        const rawData = await request(url);
+        const buff = Buffer.from(rawData, 'utf-8');
+        fs.writeFileSync('log.txt', buff);
+
+        const $ = load(rawData);
+        const articles = $('.podcast-left');
+        articles.each((index, element) => {
+            const url = $(element).find('a').attr('href');
+            const title = $(element).find('a').attr('title');
+            const content = $(element).text().replace(/\n/g, '');
+            const payload = {
+                title: title.length ? title : '',
+                url: url.length ? url : '',
+                content: content.length ? content : '',
+                source,
+            }
+            articlesList.push(payload);
+        });
+        console.log(articlesList);
+        console.log(articlesList.length);
+    } catch (error) {
+        console.log({message: `ERROR! ${error}`});
     }
-]
-
-let listTitles = [];
-const listContents = [];
-const listLinks = [];
-
-
-async function main() {
-    const browser = await puppeteer.launch({ headless: false});
-    const page = await browser.newPage();
-    await page.goto('https://vnexpress.net');
-
-    // ==> Get articles
-    const titles = await page.$$('.title-news');
-    for(const title of titles) {
-        const article = await page.evaluate(
-            el => el.querySelector('a').textContent,
-            title);
-        
-        listTitles.push(article);
-    }
-    
-    // ==> Get contents
-    const descriptions = await page.$$('.description');
-    for(const desc of descriptions) {
-        const content = await page.evaluate(
-            el => el.querySelector('a').textContent,
-            desc);
-        listContents.push(content);
-    }
-
-    // ==> Get links
-    const links = await page.$$('.title-news');
-    for(const link of links) {
-        const url = await page.evaluate(
-            el => el.querySelector('a').getAttribute('href'),
-            link);
-        listLinks.push(url);
-    }
-
-    const result = [];
-    for(i=0, j=0, k=0;
-        i<listTitles.length, j<listContents.length, k<listLinks.length;
-        i++,j++,k++)
-    {
-        const title = listTitles[i];
-        const content = listContents[j];
-        const link = listLinks[k];
-
-        const temp = {
-            article: title,
-            description: content,
-            url: link,
-        };
-        result.push(JSON.stringify(temp));
-    }
-    console.log(result);
-
-    await browser.close();
 }
 
-main();
+crawlDataFromVnexpress('https://vnexpress.net/');
