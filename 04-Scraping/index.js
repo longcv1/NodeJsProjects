@@ -21,6 +21,6 @@ app.get('/', async (req, res) => {
 app.listen(PORT, async() => {
   console.log(`listen to PORT ${PORT}...`);
   await connectDB();
-  const payload = await crawlData_Worker("https://vnexpress.net/");
+  const payload = await crawlData("https://vnexpress.net/");
   await saveToDb(payload);
 });
