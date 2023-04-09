@@ -1,6 +1,7 @@
 import { parentPort } from "node:worker_threads";
 import puppeteer from "puppeteer";
 
+
 const getUrls = async (url) => {
   const browser = await puppeteer.launch({headless: false});
   const page = await browser.newPage();

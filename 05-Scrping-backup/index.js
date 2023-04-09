@@ -79,7 +79,7 @@ app.get('/', async (req, res) => {
 app.listen(PORT, async() => {
   console.log(`listen to PORT ${PORT}...`);
   await connectDB();
-  const payload = await crawl_s2("https://vnexpress.net/");
+  const payload = await crawl_s1("https://vnexpress.net/");
   await saveToDb(payload);
   console.log('READY TO SHOW....');
 });
