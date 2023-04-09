@@ -1,11 +1,12 @@
-// const puppeteer = require('puppeteer');
 import puppeteer from "puppeteer";
+import express, { json } from 'express';
 import getTitles from "./handlers/titles-handler.js";
 import getUrls from "./handlers/url-handler.js";
 import { Worker } from "node:worker_threads";
 import compose from "./lib/processing.js";
-import Data from "./db/model.js";
-import {connectDB, saveToDb} from "./db/connection.js";
+import DataCrawl from "./db/model.js";
+import {connectDB, saveToDb, getAllData} from "./db/connection.js";
+import { resolveObjectURL } from "node:buffer";
 
 const URL_Mapping = {
   "https://vnexpress.net/": "vnexpress",
@@ -48,11 +49,7 @@ const crawl_s1 = async (url) => {
   const urls = await getUrls(page);
   const payload = compose(titles, urls, from);
   await browser.close();
-  const data = new Data({
-    data: payload,
-  })
-
-  await data.save();
+  saveToDb(payload);
 };
 
 const crawl_s2 = async (url) => {
@@ -61,8 +58,26 @@ const crawl_s2 = async (url) => {
   const titles = await title_worker();
   const urls = await url_worker();
   const payload = compose(titles, urls, source);
-  console.log(payload);
   saveToDb(payload);
 }
 
-crawl_s2("https://vnexpress.net/");
+const PORT = 3000;
+const app = express();
+app.use('/sites', express.static('sites'));
+
+app.get('/', async (req, res) => {
+  const result = await DataCrawl.find({'data.source': 'vnexpress'});
+  let records = [];
+  result.forEach(items => {
+    if(items?.data) {
+      items.data.forEach(item => records.push(item));
+    }
+  });
+  res.render('index.ejs', {records});
+});
+
+app.listen(PORT, async() => {
+  console.log(`listen to PORT ${PORT}...`);
+  await crawl_s2("https://vnexpress.net/");
+  console.log('READY TO SHOW....');
+});

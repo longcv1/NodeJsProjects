@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crawling Data</title>
+</head>
+<body>
+    <h1>Collection Data From Vnexpress.net</h1>
+    <table width="100%" border="1">
+        <tr>
+            <td><strong>Article News</strong></td>
+            <td><strong>Link News</strong></td>
+            <td><strong>Source From</strong></td>
+        </tr>
+        <% records.forEach(function(record) { %>
+            <tr>
+              <td><%= record.title %></td>
+              <td><a href="<%= record.url %>"><%= record.url %></a></td>
+              <td><%= record.source %></td>
+            </tr>
+        <% }); %>
+    </table>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Data from "./model.js";
+import DataCrawl from "./model.js";
 
 const connectDB = async () => {
     // This is credential information, it should be protected and must not be exposed to public
@@ -15,7 +15,7 @@ const connectDB = async () => {
 
 const saveToDb = async (payload) => {
   try {
-    const result = new Data({
+    const result = new DataCrawl({
       data: payload
     })
   
@@ -27,7 +27,11 @@ const saveToDb = async (payload) => {
   
 }
 
+const getAllData = async () => {
+}
+
 export {
   connectDB,
   saveToDb,
+  getAllData,
 }

@@ -10,6 +10,6 @@ const dataSchema = new Schema({
     data: [infoSchema],
 })
 
-const Data = mongoose.model('Data', dataSchema);
+const DataCrawl = mongoose.model('DataCrawl', dataSchema);
 
-export default Data;
+export default DataCrawl;
