@@ -1,5 +1,5 @@
-import { load } from "cheerio";
-import request from 'request-promise';
+import {load} from 'cheerio'
+import axios from "axios";
 import fs from 'fs';
 
 const MAPPING_URL = {
@@ -11,26 +11,26 @@ const crawlDataFromVnexpress = async (url) => {
     let articlesList = [];
     try {
         const source = MAPPING_URL[url];
-        const rawData = await request(url);
+        const res = await axios.get(url, {responseType: 'document'});
+        const rawData = res.data;
+        // Write to file
         const buff = Buffer.from(rawData, 'utf-8');
-        fs.writeFileSync('log.txt', buff);
+        fs.writeFileSync('log2.txt', buff);
 
         const $ = load(rawData);
-        const articles = $('.podcast-left');
+        const articles = $('h3.title_news');
         articles.each((index, element) => {
             const url = $(element).find('a').attr('href');
             const title = $(element).find('a').attr('title');
-            const content = $(element).text().replace(/\n/g, '');
             const payload = {
                 title: title.length ? title : '',
                 url: url.length ? url : '',
-                content: content.length ? content : '',
                 source,
             }
             articlesList.push(payload);
         });
         console.log(articlesList);
-        console.log(articlesList.length);
+        console.log(articlesList?.length);
     } catch (error) {
         console.log({message: `ERROR! ${error}`});
     }

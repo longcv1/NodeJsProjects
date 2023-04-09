@@ -10,8 +10,7 @@ export default async function getTitles(page) {
     );
     
     if(!title) {
-      console.log('----1----');
-      title = 'EMPTY';
+      title = ' ';
     }
 
     listTitles.push(title);
