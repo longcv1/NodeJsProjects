@@ -24,14 +24,19 @@ const saveToDb = async (payload) => {
   } catch (error) {
     console.log('ERROR: ', error);
   }
-  
 }
 
 const getAllData = async () => {
+  try {
+    const result = DataCrawl.find({'data.source': 'vnexpress'});
+    return result;
+  } catch (error) {
+    console.log('ERROR: ', error);
+  }
 }
 
 export {
   connectDB,
   saveToDb,
   getAllData,
-}
+};
