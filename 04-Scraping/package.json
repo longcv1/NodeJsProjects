@@ -2,10 +2,10 @@
   "name": "04-scraping",
   "version": "1.0.0",
   "description": "Collecting information from websites",
-  "main": "index.js",
+  "main": "app-puppeteer.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node app-puppeteer.js"
   },
   "keywords": [],
   "author": "LongCV1",
