@@ -2,12 +2,25 @@ import puppeteer from "puppeteer";
 import { getTitles, getUrls } from '../handlers/util-handler.js';
 import { Worker } from "node:worker_threads";
 
-
 const URL_Mapping = {
   "https://vnexpress.net/": "vnexpress",
   "https://dantri.com.vn/": "dantri",
 };
 
+/**
+ * This function is to combine 2 arrays: title news and urls
+ * @param {String} titles - title news 
+ * @param {String} urls - link 
+ * @param {String} source - vnexpress or other sites
+ * @returns { [Objec] } - Example: 
+ * [
+ *    {
+ *      title : "Article 1",
+ *      url: http://vnexpress.net/article-1.html/
+ *      source: vnexpress
+ *    }
+ * ]
+ */
 const compose = (titles, urls, source) => {
   const result = titles
     .map((item, index) => {
@@ -21,8 +34,16 @@ const compose = (titles, urls, source) => {
     return result;
 };
 
+/**
+ * Crawling data from specified website
+ * @param {String} url - http://vnexpress.net/ 
+ * @returns {Array[]} - Array of object will be saved to MongoDb's documents
+ */
 const crawlData = async (url) => {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({
+    headless: false, 
+    executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+  });
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: "domcontentloaded" });
 
@@ -58,6 +79,11 @@ const url_worker = async () => {
   });
 };
 
+/**
+ * Crawling data using worker_threads
+ * @param {String} url - link website
+ * @returns {Array[Object]}
+ */
 const crawlData_Worker = async (url) => {
   const source = URL_Mapping[url];
   const titles = await title_worker();

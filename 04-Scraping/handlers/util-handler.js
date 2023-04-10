@@ -1,4 +1,8 @@
-
+/**
+ * Get all title news
+ * @param {Object} page 
+ * @returns {Array[]}
+ */
 const getTitles = async(page) => {
   let listTitles = [];
   const articles = await page.$$('.title-news');
@@ -19,6 +23,11 @@ const getTitles = async(page) => {
   return listTitles;
 };
 
+/**
+ * Get all urls
+ * @param {Object} page 
+ * @returns {Array[]}
+ */
 const getUrls =  async(page) => {
   const listLinks = [];
   const links = await page.$$(".title-news");
