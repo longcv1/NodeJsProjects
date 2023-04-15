@@ -6,3 +6,9 @@ function padLeft(padding: number | string, input: string) {
 }
 
 console.log(padLeft(2, 'abc'));
+
+const logNumber : (i: number) => void = (i:number) => {
+  console.log(i);
+}
+
+logNumber(9);
