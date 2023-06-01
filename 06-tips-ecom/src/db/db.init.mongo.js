@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const {db: {host, name, port}} = require('../configs/config.mongodb');
 
-const connectionString = `mongodb://localhost:27017/shopDev`;
+const connectionString = `mongodb://${host}:${port}/${name}`;
+console.log(connectionString);
 
 class Database {
     constructor() {
@@ -12,14 +14,16 @@ class Database {
             mongoose.set('debug', true);
             mongoose.set('debug', {color: true});
         }
-        mongoose.connect(connectionString);
+        mongoose.connect(connectionString)
+        .then( _ => console.log('Connected to MongoDB successfully...'))
+        .catch( err => console.log('Connect error'));
     }
 
     static getInstance() {
         if(!Database._Instance) {
-            this._Instance = new Database();
+            Database._Instance = new Database();
         }
-        return this._Instance;
+        return Database._Instance;
     }
 }
 
