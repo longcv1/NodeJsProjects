@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const { default: helmet } = require('helmet');
 const compression = require('compression');
-const {countConnection} = require('./libs/libs.check.connection');
+const {countConnection, checkOverload} = require('./libs/libs.check.connection');
 
 //init app using express
 const app = express();
@@ -15,6 +15,7 @@ app.use(compression())
 //init database
 require('./db/db.init.mongo');
 countConnection();
+checkOverload();
 
 //init routers
 
