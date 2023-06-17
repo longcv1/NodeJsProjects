@@ -1,3 +1,5 @@
+'use strict'
+
 const dev = {
     db : {
         host: process.env.DEV_DB_HOST || 'localhost',

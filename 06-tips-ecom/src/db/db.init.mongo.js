@@ -10,13 +10,13 @@ class Database {
     }
 
     connect(type = 'mongodb') {
-        if(1===1) {
+        if (1 === 1) {
             mongoose.set('debug', true);
             mongoose.set('debug', {color: true});
         }
         mongoose.connect(connectionString)
-        .then( _ => console.log('Connected to MongoDB successfully...'))
-        .catch( err => console.log('Connect error'));
+        .then(console.log('Connected to MongoDB successfully...'))
+        .catch( err => console.log('Connect error: ', err));
     }
 
     static getInstance() {
