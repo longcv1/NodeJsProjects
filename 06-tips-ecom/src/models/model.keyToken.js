@@ -10,6 +10,10 @@ const keyTokenSchema = new mongoose.Schema(
       required: true,
       ref: "Shop",
     },
+    privateKey: {
+      type: String,
+      required: true,
+    },
     publicKey: {
       type: String,
       required: true,

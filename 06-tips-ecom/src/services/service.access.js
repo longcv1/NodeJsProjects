@@ -35,20 +35,8 @@ class AccessService {
       });
 
       if (newShop) {
-        // Create private key and public key
-        const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
-          modulusLength: 4096,
-          publicKeyEncoding: {
-            type: "pkcs8",
-            format: "pem",
-          },
-          privateKeyEncoding: {
-            type: "pkcs8",
-            format: "pem",
-            cipher: "aes-256-cbc",
-            passphrase: "top secret",
-          },
-        });
+        const privateKey = crypto.randomBytes(64).toString('hex');
+        const publicKey = crypto.randomBytes(64).toString('hex');
 
         console.log(
           "🚀 ~ file: service.access.js:51 ~ AccessService ~ signup= ~ publicKey:",
@@ -59,27 +47,23 @@ class AccessService {
           privateKey
         );
 
-        const publicKeyString = await KeyTokenService.createToken({
+        const keyStore = await KeyTokenService.createToken({
           userId: newShop._id,
           publicKey,
+          privateKey
         });
 
-        console.log("🚀 ~ file: service.access.js:68 ~ AccessService ~ signup= ~ publicKeyString:", publicKeyString)
-
-        if (!publicKeyString) {
+        if (!keyStore) {
           return {
             code: "xxx",
             message: "public key error",
           };
         }
 
-        const publicKeyObject = crypto.createPublicKey(publicKeyString);
-        console.log("🚀 ~ file: service.access.js:76 ~ AccessService ~ signup= ~ publicKeyObject:", publicKeyObject)
-        
         // create token pair
         const tokens = await createTokenPair(
           { userId: newShop._id, email },
-          publicKeyObject,
+          publicKey,
           privateKey
         );
         console.log(
