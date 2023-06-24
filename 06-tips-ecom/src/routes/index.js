@@ -1,7 +1,10 @@
-const express = require('express');
-const { signUp } = require('../controllers/controller.access');
+const express = require("express");
+const { checkApiKey, checkPermission } = require("../auth/checkAuth");
 const router = express.Router();
 
-router.use('/shop', signUp);
+// Check Api Key and permission
+router.use(checkApiKey);
+router.use(checkPermission('0000'));
+router.use("/shop", require("./access/signup"));
 
 module.exports = router;
