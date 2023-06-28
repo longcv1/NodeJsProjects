@@ -5,12 +5,10 @@ const JWT = require("jsonwebtoken");
 const createTokenPair = async (payload, publicKey, privateKey) => {
   try {
     const accessToken = await JWT.sign(payload, publicKey, {
-      algorithm: "RS256",
       expiresIn: "2 days",
     });
 
     const refreshToken = await JWT.sign(payload, privateKey, {
-      algorithm: "RS256",
       expiresIn: "5 days",
     });
 
@@ -25,7 +23,7 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
 
     return { accessToken, refreshToken };
   } catch (error) {
-    console.log("🚀 ~ file: authUtils.js:28 ~ createTokenPair ~ error:", error);
+    console.debug("---> DEBUG::  file: authUtils.js:26  error-", error);
     return null;
   }
 };

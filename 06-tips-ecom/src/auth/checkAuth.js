@@ -10,6 +10,7 @@ const HEADER = {
 const checkApiKey = async (req, res, next) => {
   try {
     const key = req.headers[HEADER.API_KEY]?.toString();
+    
     if (!key) {
       return res.status(403).json({
         message: "Forbidden...!",
@@ -19,31 +20,31 @@ const checkApiKey = async (req, res, next) => {
     const objKey = await findById(key);
     if (!objKey) {
       res.status(403).json({
-        message: "Forbidden....!",
+        message: "Cannot find you api key....!",
       });
     }
 
-    req.objKey = objKey;
+    req.objKey = objKey[0];
     return next();
   } catch (error) {
-    res.status(404).json({
-      message: "Cannot find you api key.....",
-    });
+    console.log(error);
   }
 };
 
-const checkPermission = async (permissions) => {
+const checkPermission = (permissions) => {
   return (req, res, next) => {
-    if (!req.objKey.permissions) {
+    console.log("🚀 ~ file: checkAuth.js:44 ~ return ~ permissions:", req?.objKey?.permissions);
+
+    if (!req?.objKey?.permissions) {
       return res.status(403).json({
         message: "Permission denied...!",
       });
     }
-
-    const isValid = req.objKey.permissions.include(permissions);
+    
+    const isValid = req?.objKey?.permissions.includes(permissions);
     if (!isValid) {
       return res.status(403).json({
-        message: "Permission denied...!",
+        message: "Permission invalid...!",
       });
     }
 

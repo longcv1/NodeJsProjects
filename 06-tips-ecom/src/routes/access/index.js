@@ -3,6 +3,7 @@ const controllerAccess = require('../../controllers/controller.access');
 const asynHandler = require('../../core/asyn.handler');
 const router = express.Router();
 
-router.post('/signup', asynHandler(controllerAccess.signUp));
+router.post('/login', asynHandler(controllerAccess.login));
+router.post('/signup', asynHandler(controllerAccess.signup));
 
 module.exports = router;

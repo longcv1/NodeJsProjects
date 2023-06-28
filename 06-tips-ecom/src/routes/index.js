@@ -5,6 +5,6 @@ const router = express.Router();
 // Check Api Key and permission
 router.use(checkApiKey);
 router.use(checkPermission('0000'));
-router.use("/shop", require("./access/signup"));
+router.use('/v1/api', require("./access"));
 
 module.exports = router;
