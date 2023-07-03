@@ -33,7 +33,6 @@ const checkApiKey = async (req, res, next) => {
 
 const checkPermission = (permissions) => {
   return (req, res, next) => {
-    console.log("🚀 ~ file: checkAuth.js:44 ~ return ~ permissions:", req?.objKey?.permissions);
 
     if (!req?.objKey?.permissions) {
       return res.status(403).json({

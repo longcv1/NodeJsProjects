@@ -4,6 +4,7 @@ const StatusCodes = {
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
+  NOT_FOUND: 404,
   CONFLICTED: 409,
 };
 
@@ -12,6 +13,7 @@ const ReasonStatusCode = {
   UNAUTHORIZED: "Un-authorized",
   FORBIDDEN: "Forbidden",
   CONFLICTED: "Conflicted",
+  NOT_FOUND: "Not found"
 };
 
 class ErrorHandler extends Error {
@@ -57,9 +59,19 @@ class AuthFailureError extends ErrorHandler {
   }
 }
 
+class NotFoundError extends ErrorHandler {
+  constructor(
+    message = ReasonStatusCode.NOT_FOUND,
+    statusCode = StatusCodes.NOT_FOUND
+  ) {
+    super(message, statusCode);
+  }
+}
+
 module.exports = {
   ConflictError,
   BadRequestError,
   ForbiddenError,
-  AuthFailureError
+  AuthFailureError,
+  NotFoundError
 };

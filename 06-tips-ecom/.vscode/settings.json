@@ -1,0 +1,6 @@
+{
+    "turboConsoleLog.delimiterInsideMessage": "",
+    "turboConsoleLog.insertEnclosingClass": false,
+    "turboConsoleLog.logMessagePrefix": "--->[DEBUG]",
+    "turboConsoleLog.logMessageSuffix": "::"
+}

@@ -1,9 +1,22 @@
+POST http://localhost:4000/v1/api/login HTTP/1.1
+content-type: application/json
+x-api-key: 81ee0dcce242ca80edbe7a69a88be5e6256de74af755b9e5d6b4c71ba37844d3b4e0a70e3542319c0d38a9ce3420f17843534292c8eeafa7beb02fc71bd49c4c
+
+{
+    "email": "longcv7@fsoft.com.vn",
+    "password": "pika@123"
+}
+
+###
+
 POST http://localhost:4000/v1/api/signup HTTP/1.1
 content-type: application/json
 x-api-key: 81ee0dcce242ca80edbe7a69a88be5e6256de74af755b9e5d6b4c71ba37844d3b4e0a70e3542319c0d38a9ce3420f17843534292c8eeafa7beb02fc71bd49c4c
 
 {
-    "name": "longcv7",
+    "name": "longcv7"
     "email": "longcv7@fsoft.com.vn",
     "password": "pika@123"
 }
+
+###

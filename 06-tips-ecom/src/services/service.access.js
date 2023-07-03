@@ -17,7 +17,7 @@ const ShopRoles = {
 
 class AccessService {
 
-  static login = async ({ email, password }) => {
+  static login = async ({ email, password, refreshToken = null }) => {
     // 1 - check email in db
     // 2 - match password
     // 3 - create access token and refresh token and save
@@ -125,6 +125,10 @@ class AccessService {
       };
     }
   };
+
+  static logout = async (keyStore) => {
+    return await KeyTokenService.removeKeyById(keyStore._id);
+  }
 }
 
 module.exports = AccessService;
