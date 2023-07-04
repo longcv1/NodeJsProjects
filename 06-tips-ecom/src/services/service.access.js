@@ -4,8 +4,8 @@ const modelShop = require("../models/model.shop");
 const bcrypt = require("bcrypt");
 const crypto = require("node:crypto");
 const KeyTokenService = require("./service.token");
-const { createTokenPair } = require("../auth/authUtils");
-const { ConflictError, BadRequestError, AuthFailureError } = require("../core/error.response");
+const { createTokenPair, verifyJwt } = require("../auth/authUtils");
+const { ConflictError, BadRequestError, AuthFailureError, ForbiddenError } = require("../core/error.response");
 const findByEmail = require("./service.shop");
 
 const ShopRoles = {
@@ -128,6 +128,45 @@ class AccessService {
 
   static logout = async (keyStore) => {
     return await KeyTokenService.removeKeyById(keyStore._id);
+  }
+
+  static handleRefreshToken = async (refreshToken) => {
+    const foundRefreshTokenUsed = await KeyTokenService.findByRefreshTokenUsed(refreshToken);
+    if (foundRefreshTokenUsed) {
+      // decode token
+      const {userId} = await verifyJwt(refreshToken, foundRefreshTokenUsed.privateKey);
+      // delete token for security
+      await KeyTokenService.deleteKeyById(userId);
+      throw new ForbiddenError('>>>>>>>> Your token is vulnerability');
+    }
+
+    const holderToken = KeyTokenService.findByRefreshToken(refreshToken);
+    if (!holderToken) throw new AuthFailureError('Access denied');
+
+    const {userId, email} = await verifyJwt(refreshToken, holderToken.privateKey);
+    const foundShop = await findByEmail({email});
+    if (!foundShop) throw new AuthFailureError('You are not registered or login');
+
+    // create new pair tokens
+    const pairToken = await createTokenPair({userId, email}, holderToken.publicKey, holderToken.privateKey);
+
+    // update token
+    await holderToken.update({
+      $set: {
+        refreshToken: pairToken.refreshToken
+      },
+      $addToSet: {
+        refreshTokenUsed: refreshToken
+      }
+    });
+
+    return {
+      user: {
+        userId,
+        email,
+      },
+      pairToken
+    }
   }
 }
 
