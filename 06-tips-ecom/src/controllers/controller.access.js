@@ -3,10 +3,14 @@ const serviceAccess = require("../services/service.access");
 
 class AccessController {
   login = async (req, res, next) => {
-    new SuccessResponse({
-      message: 'Login success',
-      metadata: await serviceAccess.login(req.body)
-    }).send(res);
+    try {
+      new SuccessResponse({
+        message: "Login success....",
+        metadata: await serviceAccess.login(req.body),
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
   }
 
   signup = async (req, res, next) => {
@@ -21,17 +25,25 @@ class AccessController {
   };
 
   logout = async (req, res, next) => {
-    new SuccessResponse({
-      message: 'Logout success',
-      metadata: await serviceAccess.logout(req.keyStore)
-    }).send(res);
+    try {
+      new SuccessResponse({
+        message: 'Logout success',
+        metadata: await serviceAccess.logout(req.keyStore)
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
   }
 
   handleRefreshToken = async (req, res, next) => {
-    new SuccessResponse({
-      message: 'Get tokens success',
-      metadata: await serviceAccess.handleRefreshToken(req.body?.refreshToken)
-    }).send(res);
+    try {
+      new SuccessResponse({
+        message: 'Get tokens success',
+        metadata: await serviceAccess.handleRefreshToken(req.body?.refreshToken)
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

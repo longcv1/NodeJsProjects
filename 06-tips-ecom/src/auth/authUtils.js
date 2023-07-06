@@ -1,7 +1,7 @@
 "use strict";
 
 const JWT = require("jsonwebtoken");
-const asynHandler = require("../libs/asyn.handler");
+const asyncHandler = require("../libs/async.handler");
 const { AuthFailureError, NotFoundError } = require("../core/error.response");
 const { findByUserId } = require("../services/service.token");
 
@@ -39,7 +39,7 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
   }
 };
 
-const authentication = asynHandler(async (req, res, next) => {
+const authentication = asyncHandler(async (req, res, next) => {
   //1.
   const userId = req.headers[HEADER.CLIENT_ID];
   if (!userId) throw new AuthFailureError('Invalid request!');

@@ -17,7 +17,7 @@ const ShopRoles = {
 
 class AccessService {
 
-  static login = async ({ email, password, refreshToken = null }) => {
+  static login = async ({ email, password }) => {
     // 1 - check email in db
     // 2 - match password
     // 3 - create access token and refresh token and save

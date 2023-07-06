@@ -1,9 +1,9 @@
 "use strict";
 
-const asynHandler = (fn) => {
+const asyncHandler = (fn) => {
   return (req, res, next) => {
     fn(req, res, next).catch(next);
   };
 };
 
-module.exports = asynHandler;
+module.exports = asyncHandler;
