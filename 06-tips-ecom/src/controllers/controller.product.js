@@ -86,7 +86,33 @@ class ProductController {
     } catch (error) {
       next(error);
     }
-}
+  }
+
+  // GET
+  findAllProducts = async (req, res, next) => {
+    try {
+      new SuccessResponse({
+        message: "Get all products OK.....",
+        metadata: await ProductService.findAllProducts(req.query),
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // GET
+  findProduct = async (req, res, next) => {
+    try {
+      new SuccessResponse({
+        message: "Get one product OK.....",
+        metadata: await ProductService.findProduct({
+          product_id: req.params.product_id,
+        }),
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new ProductController();

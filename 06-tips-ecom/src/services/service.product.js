@@ -8,6 +8,8 @@ const {
    findAllPublishForShop,
    searchProductsByUser,
    unPublishProductByShop,
+   findAllProducts,
+   findProduct,
 } = require('../models/repositories/product.repo');
 
 class ProductFactory {
@@ -20,6 +22,11 @@ class ProductFactory {
          default:
             return null;
       }
+   }
+
+   // PUT
+   static async updateProduct(typeProduct, payload) {
+
    }
 
    // GET
@@ -46,6 +53,30 @@ class ProductFactory {
    // GET
    static async searchProducts (keySearch) {
       return await searchProductsByUser(keySearch);
+   }
+
+   // GET
+   static async findAllProducts ({
+      limit = 50,
+      sort = 'ctime',
+      page = 1,
+      filter = {isPublished: true}
+   }) {
+      return findAllProducts({
+         limit,
+         sort,
+         page,
+         filter,
+         select: ['product_name', 'product_price', 'product_thumb'],
+      });
+   }
+
+   // GET
+   static async findProduct ({product_id}) {
+      return findProduct({
+         product_id,
+         unSelect: ['__v'],
+      });
    }
 }
 

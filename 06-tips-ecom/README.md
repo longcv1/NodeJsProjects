@@ -1,11 +1,13 @@
-# Connection to MongoDB
-# Create env
-# Implement feature signup
-# Implement feature "Login"
-# Implement feature "Logout"
-# Implement refresh token and security
-# Section 12: Create schema product ecommerce (using Polymorphic pattern)
-# Section 13: Api Product use Factory Pattern
-# Section 14: Api service Product advance
-# Section 15: Service Product using Factory and Stategy (bonus)
-# Section 16: Add some functions isDraft, isPublish, unPublish, edit Product Service schema
+1. Connection to MongoDB
+2. Create env
+3. Implement feature signup
+4. Implement feature "Login"
+5. Implement feature "Logout"
+6. Implement refresh token and security
+7. Section 12: Create schema product ecommerce (using Polymorphic pattern)
+8. Section 13: Api Product use Factory Pattern
+9. Section 14: Api service Product advance
+10. Section 15: Service Product using Factory and Stategy (bonus)
+11. Section 16: Add some functions isDraft, isPublish, unPublish, edit Product Service schema
+12. Section 17: Add findAll, findOne in Product Service
+
