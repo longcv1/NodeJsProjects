@@ -10,4 +10,4 @@
 10. Section 15: Service Product using Factory and Stategy (bonus)
 11. Section 16: Add some functions isDraft, isPublish, unPublish, edit Product Service schema
 12. Section 17: Add findAll, findOne in Product Service
-
+13. Section 18: Update product with patch method in Product Service

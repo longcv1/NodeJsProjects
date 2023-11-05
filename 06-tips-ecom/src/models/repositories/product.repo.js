@@ -1,4 +1,4 @@
-const { product, clothing, electronic } = require('../../models/model.product');
+const { product } = require('../../models/model.product');
 const { Types } = require('mongoose');
 const { getSelecData, unSelecData } =require('../../utils');
 
@@ -88,6 +88,15 @@ const findProduct = async ({product_id, unSelect}) => {
    return products;
 }
 
+const updateProductById = async ({
+   productId,
+   payload,
+   model,
+   isNew = true,
+}) => {
+   return await model.findByIdAndUpdate(productId, payload, {new: isNew})
+}
+
 module.exports = {
    findAllDraftsForShop,
    publishProductByShop,
@@ -96,4 +105,5 @@ module.exports = {
    searchProductsByUser,
    findAllProducts,
    findProduct,
+   updateProductById,
 };

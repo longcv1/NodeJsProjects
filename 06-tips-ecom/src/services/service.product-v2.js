@@ -49,11 +49,14 @@ class Product {
 
 class Clothing extends Product {
   async createProduct() {
-    const newClothing = await clothing.create(this.product_attributes);
+    const newClothing = await clothing.create({
+       ...this.product_attributes,
+       product_shop: this.product_shop,
+    });
     if (!newClothing)
       throw new BadRequestError("Cannot create new instance of Clothing");
 
-    const newProduct = await super.createProduct();
+    const newProduct = await super.createProduct(newClothing._id);
     if (!newProduct)
       throw new BadRequestError("Cannot create new instance of product");
 

@@ -10,7 +10,9 @@ const {
    unPublishProductByShop,
    findAllProducts,
    findProduct,
+   updateProductById,
 } = require('../models/repositories/product.repo');
+const { removeInvalidObj, updateNestedObjParser } = require('../utils');
 
 class ProductFactory {
    static async createProduct(typeProduct, payload) {
@@ -24,9 +26,15 @@ class ProductFactory {
       }
    }
 
-   // PUT
-   static async updateProduct(typeProduct, payload) {
-
+   static async updateProduct(typeProduct, productId, payload) {
+      switch (typeProduct) {
+         case 'Electronics':
+            return new Electronics(payload).updateProduct(productId, payload);
+         case 'Clothing':
+            return new Clothing(payload).updateProduct(productId);
+         default:
+            return null;
+      }
    }
 
    // GET
@@ -101,22 +109,50 @@ class Product {
       this.product_shop = product_shop;
    }
 
-   async createProduct(_id) {
-      return await product.create({ ...this, _id });
+   async createProduct(producId) {
+      return await product.create({ ...this, _id: producId });
+   }
+
+   async updateProduct(producId, payload) {
+      return await updateProductById({
+         producId,
+         payload,
+         model: product,
+      });
    }
 }
 
 class Clothing extends Product {
    async createProduct() {
-      const newClothing = await clothing.create(this.product_attributes);
+      const newClothing = await clothing.create({
+         ...this.product_attributes,
+         product_shop: this.product_shop,
+      });
+
       if (!newClothing)
          throw new BadRequestError('Cannot create new instance of Clothing');
 
-      const newProduct = await super.createProduct();
+      const newProduct = await super.createProduct(newClothing._id);
       if (!newProduct)
          throw new BadRequestError('Cannot create new instance of product');
 
       return newProduct;
+   }
+
+   async updateProduct(productId) {
+      const objParams = removeInvalidObj(this);
+
+      if(objParams.product_attributes) {
+         await updateProductById({
+            productId,
+            payload: updateNestedObjParser(objParams.product_attributes),
+            model: clothing,
+         })
+      }
+
+      const updatedProduct = await super.updateProduct(productId, updateNestedObjParser(objParams));
+
+      return updatedProduct;
    }
 }
 
@@ -126,6 +162,7 @@ class Electronics extends Product {
          ...this.product_attributes,
          product_shop: this.product_shop,
       });
+
       if (!newElectronic)
          throw new BadRequestError('Cannot create new instance of Electronics');
 
