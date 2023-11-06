@@ -1,3 +1,4 @@
+# TipsJS - eCommerce Project
 1. Connection to MongoDB
 2. Create env
 3. Implement feature signup
@@ -11,3 +12,4 @@
 11. Section 16: Add some functions isDraft, isPublish, unPublish, edit Product Service schema
 12. Section 17: Add findAll, findOne in Product Service
 13. Section 18: Update product with patch method in Product Service
+14. Section 19: Inventories Model and Services
