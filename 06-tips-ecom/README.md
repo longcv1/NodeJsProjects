@@ -13,3 +13,4 @@
 12. Section 17: Add findAll, findOne in Product Service
 13. Section 18: Update product with patch method in Product Service
 14. Section 19: Inventories Model and Services
+15. Section 20: Discount model
