@@ -21,7 +21,7 @@ const discountSchema = new mongoose.Schema(
       discount_shopId: { type: mongoose.Types.ObjectId, ref: 'Shop' },
 
       discount_is_active: { type: Boolean, default: true },
-      discount_apply_to: {
+      discount_applies_to: {
          type: String,
          required: true,
          enum: ['all', 'specific'],

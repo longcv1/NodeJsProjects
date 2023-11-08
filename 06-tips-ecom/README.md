@@ -14,3 +14,4 @@
 13. Section 18: Update product with patch method in Product Service
 14. Section 19: Inventories Model and Services
 15. Section 20: Discount model
+16. Section 21: Discount services - part 1
