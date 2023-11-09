@@ -15,3 +15,5 @@
 14. Section 19: Inventories Model and Services
 15. Section 20: Discount model
 16. Section 21: Discount services - part 1
+17. Section 22: Discount services - part 2
+
