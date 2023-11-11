@@ -17,5 +17,4 @@
 16. Section 21: Discount services - part 1
 17. Section 22: Discount services - part 2
 18. Section 23: Cart service - part 1
-
-
+19. Section 24: Cart service - part 2

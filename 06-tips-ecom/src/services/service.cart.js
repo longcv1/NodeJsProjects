@@ -1,7 +1,8 @@
 'use strict'
 
-// const { BadRequestError, NotFoundError } = require('../core/error.response');
+const { NotFoundError } = require('../core/error.response');
 const Cart = require('../models/model.cart');
+const { getProductById } = require('../models/repositories/product.repo');
 // const { Types } = require('mongoose');
 
 class CartService {
@@ -46,6 +47,49 @@ class CartService {
       }
 
       return await CartService.updateUserCartQuantity({userId, product});
+    }
+
+    static async addToCartV2({userId, shop_order_ids}) {
+      const {
+         productId,
+         quantity,
+         old_quantity,
+      // eslint-disable-next-line no-unsafe-optional-chaining
+      } = shop_order_ids[0]?.items.product[0];
+
+      const foundProduct = getProductById(productId);
+      if(!foundProduct) throw new NotFoundError();
+      if(foundProduct.product_shop.toString() !== shop_order_ids[0].items.product[0]) {
+         throw new NotFoundError('Product not belong to the shop');
+      }
+
+      return await CartService.updateUserCartQuantity({
+         userId,
+         product: {
+            productId,
+            quantity: quantity - old_quantity,
+         }
+      });
+    }
+
+    static async deleteUserCart({userId, productId}) {
+      const query = { cart_userId: userId, cart_state: 'active'},
+      updateSet = {
+         $pull: {
+            cart_products: {
+               productId,
+            }
+         }
+      }
+      const deletedCart = await Cart.updateOne(query, updateSet);
+
+      return deletedCart;
+    }
+
+    static async getListUserCart({userId}) {
+      return await Cart.findOne({
+         cart_userId: userId,
+      }).lean();
     }
 }
 
