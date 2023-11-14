@@ -19,4 +19,6 @@ const inventorySchema = new mongoose.Schema(
 );
 
 //Export the model
-module.exports = mongoose.model(DOCUMENT_NAME, inventorySchema);
+module.exports = {
+  inventory: mongoose.model(DOCUMENT_NAME, inventorySchema)
+};

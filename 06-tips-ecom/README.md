@@ -19,3 +19,4 @@
 18. Section 23: Cart service - part 1
 19. Section 24: Cart service - part 2
 20. Section 25: Order service - part 1
+21. Section 26: Order service - part 2
