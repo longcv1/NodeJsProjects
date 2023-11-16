@@ -3,6 +3,7 @@
 const { Types } = require("mongoose");
 const { NotFoundError } = require("../core/error.response");
 const Comment = require("../models/model.comment");
+const { findProduct } = require("./service.product");
 
 class CommentService {
   static async createComment({
@@ -94,6 +95,41 @@ class CommentService {
       .sort({
         comment_left: 1,
       });
+  }
+
+  static async deleteComments({commentId, productId}) {
+    const foundProduct = await findProduct({
+      product_id: productId,
+    });
+
+    if(!foundProduct) throw new NotFoundError('Product not found');
+
+    const comment = await Comment.findById(commentId);
+    if(!comment) throw new NotFoundError('Comment not found');
+
+    const leftValue = comment.comment_left;
+    const rightValue = comment.comment_right;
+
+    const width = rightValue - leftValue + 1;
+
+    await Comment.deleteMany({
+      comment_productId: Types.ObjectId(productId),
+      comment_left: {$gte: leftValue, $lte: rightValue},
+    });
+
+    await Comment.updateMany({
+      comment_productId: Types.ObjectId(productId),
+      comment_right: {$gt: rightValue},
+    });
+
+    await Comment.updateMany({
+      comment_productId: Types.ObjectId(productId),
+      comment_left: {$gt: rightValue},
+    }, {
+      $inc: {comment_right: -width},
+    });
+
+    return true;
   }
 }
 
