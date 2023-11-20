@@ -14,6 +14,7 @@ const {
    updateProductById,
 } = require('../models/repositories/product.repo');
 const { removeInvalidObj, updateNestedObjParser } = require('../utils');
+const { publishNotiToSystem } = require('./service.notification');
 
 class ProductFactory {
    static async createProduct(typeProduct, payload) {
@@ -119,6 +120,17 @@ class Product {
             stock: this.product_quantity,
          })
       }
+      
+      // push notification to system collection
+      publishNotiToSystem({
+         type: 'SHOP-001',
+         receivedId: 1,
+         senderId: this.product_shop,
+         options: {
+            product_name: this.product_name,
+            shop_name: this.product_shop,
+         }
+      }).then(res => console.log(res)).catch(error => console.log(error));
       
       return newProduct;
    }

@@ -22,3 +22,4 @@
 21. Section 26: Order service - part 2
 22. Section 38: Nested comments - part 1
 23. Section 39: Nested comments - part 2
+24. Section 42: Notifications
