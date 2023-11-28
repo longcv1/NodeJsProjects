@@ -23,3 +23,56 @@
 22. Section 38: Nested comments - part 1
 23. Section 39: Nested comments - part 2
 24. Section 42: Notifications
+
+# MySQL: Index va nhung sai lam nen tranh
+Example:
+CREATE TABLE `users` (
+    `usr_id` int NOT NULL AUTO_INCREMENT,
+    `usr_age` int DEFAULT '0',
+    `usr_status` int DEFAULT '0',
+    `usr_name` varchar(128) COLLATE utf8mb4_bin DEFAULT NULL,
+    `usr_email` varchar(128) COLLATE utf8mb4_bin DEFAULT NULL,
+    `usr_address` varchar(128) COLLATE utf8mb4_bin DEFAULT NULL,
+    -- KEY INDEX
+    PRIMARY KEY (`usr_id`),
+    KEY `idx_email_age_name` (`usr_email`, `usr_age`, `usr_name`),
+    KEY `idx_status` (`usr_status`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_bin;
+
+INSERT INTO users (
+    usr_id, usr_age, usr_status, usr_name, usr_email, usr_address
+)
+VALUES (
+    1, 30, 1, 'username01', 'username01@gmail.com', 'Hanoi'
+)
+
+INSERT INTO users (
+    usr_id, usr_age, usr_status, usr_name, usr_email, usr_address
+)
+VALUES (
+    2, 31, 1, 'username02', 'username02@gmail.com', 'HCM'
+)
+
+INSERT INTO users (
+    usr_id, usr_age, usr_status, usr_name, usr_email, usr_address
+)
+VALUES (
+    3, 32, 0, 'username03', 'username03@gmail.com', 'Hue'
+)
+
+--3 statements as below act as the same result
+select * from users where usr_email='username01@gmail.com';
+select * from users where usr_email='username01@gmail.com' AND usr_name=30;
+select * from users where usr_email='username01@gmail.com' AND usr_name=30 AND usr_name='username01';
+
+-- Rule 01: Truong chi muc dau tien ngoai cung ben trai, mien la truong do ton tai thi mysql co the danh dc index
+-- nguoc lai, neu trong cau truy van sql ko co truong ngoai cung ben trai do, ket qua truy van se ko con chinh xac
+Example:
+select * from users where usr_name=30;
+select * from users where usr_name=30 AND usr_name='username01';
+
+-- Rule 02: Khong su dung SELECT * trong truy van
+-- Rule 03: Khong su dung tinh toan tren cac index trong truy van (primary key, index)
+-- Rule 04: su dung % ben trai khi truy van voi toan tu LIKE nhu: "username01%" de ko bi mat index trong khi truy van
+-- Rule 05: neu su dung 1 truong nao do khong dc danh chi muc, thi truy van voi toan tu OR se bi mat index
+-- Example: SELECT * FROM users WHERE usr_id=1 OR usr_status=0 OR usr_address='Danang' => mat index
